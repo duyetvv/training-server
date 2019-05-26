@@ -17,8 +17,8 @@ app.use(bodyParser.json());
 rootRoute(router);
 
 app.use('/api', router);
-app.listen(process.env.PORT || 80, () => {
-  console.log('API listening on port 80!')
+app.listen(process.env.PORT || 8080, () => {
+  console.log('API listening on port 8080!')
 })
 
 module.exports = app;
