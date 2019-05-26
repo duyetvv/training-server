@@ -2,12 +2,11 @@ import connection from '../helpers/mysql';
 
 class Model {
   constructor(name, props) {
-    super(props);
     this.props = props;
     this.name = name;
   }
 
-  create = async () => {
+  creating = async () => {
     const fields = Object.keys(this.props).map((field) => (
       `${field} ${fields[field].type} ${fields[field].required} default ${fields[field].default}`
     ));
@@ -34,7 +33,7 @@ class Model {
     })
   }
 
-  insert = async (entity) => {
+  inserting = async (entity) => {
     const fields = Object.keys(this.props).sort();
     const values = fields.map((field) => (
       entity[field] || this.props[field].default
@@ -55,10 +54,6 @@ class Model {
     });
   }
 
-  querying = async (conditions) => {
-
-  }
-
   queryall = async () => {
     const queryStr = `SELECT * FROM todos`;
     connection.query(queryStr, (error, results, fields) => {
@@ -66,6 +61,35 @@ class Model {
         return console.error(error.message);
       }
       console.log(results);
+    });
+  }
+
+  updating = async (id, valObj) => {
+    const newVal = Object.keys(valObj).map((field) => (
+      `${field} = ${valObj[field]}`
+    ));
+
+    const queryStr =  `UPDATE ${this.name} 
+      SET ${newVal.join(', ')}
+      WHERE id = ${id}
+    `;
+
+    connection.query(queryStr, data, (error, results, fields) => {
+      if (error){
+        return console.error(error.message);
+      }
+      console.log('Rows affected:', results.affectedRows, fields);
+    });
+  }
+
+  deleting = (id) => {
+    const queryStr = `DELETE FROM todos WHERE id = ${id}`;
+ 
+    connection.query(queryStr, 1, (error, results, fields) => {
+      if (error)
+        return console.error(error.message);
+    
+      console.log('Deleted Row(s):', results.affectedRows);
     });
   }
 }
