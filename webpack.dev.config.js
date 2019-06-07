@@ -9,6 +9,8 @@ module.exports = require('./webpack.config')({
   output: {
     filename: '[name].js',
     chunkFilename: '[name].chunk.js',
+    path: path.join(__dirname, 'dist'),
+    publicPath: '/',
   },
   target: "node",
   module: {
