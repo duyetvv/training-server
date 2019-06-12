@@ -1,4 +1,4 @@
-import rootRoute from './routes/index';
+import rootRoute from './routes';
 
 // import path from 'path';
 import cors from 'cors';

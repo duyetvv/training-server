@@ -1,4 +1,5 @@
-import connection from '../helpers/mysql';
+import mysql from 'mysql';
+import config from '../config';
 
 class Database {
   constructor(name, props) {
@@ -8,8 +9,11 @@ class Database {
   }
 
   creating = async () => {
-    const fields = Object.keys(this.props).map((field) => (
-      `${field} ${fields[field].type} ${fields[field].required} default ${fields[field].default}`
+    const connection = mysql.createConnection(config.mysql);
+    
+    const props = this.props;
+    const fields = Object.keys(props).map((field) => (
+      `${field} ${props[field].dataType} ${props[field].nullStr} default ${props[field].defVal} ${props[field].more || ''}`
     ));
 
     const queryStr = `create table if not exists ${this.name}(
@@ -23,18 +27,27 @@ class Database {
         return err;
       }
 
-      connection.query(queryStr, function(err, results, fields) {
+      connection.query(queryStr, (err, results, fields) => {
         if (err) {
-          console.log(err.message);
+          console.log(err.message, fields);
           return err;
         }
 
         return results;
       });
+
+      connection.end((errend) => {
+        if (err) { 
+          console.log(errend.message); 
+          return errend;
+        }
+      });
     })
   }
 
   inserting = async (entity) => {
+    const connection = mysql.createConnection(config.mysql);
+
     const fields = Object.keys(this.props).sort();
     const values = fields.map((field) => (
       entity[field] || this.props[field].default
@@ -45,14 +58,17 @@ class Database {
       VALUES(${values.join(',')})
     `;
 
-    connection.query(queryStr, function(err, results, fields) {
-      if (err) {
-        console.log(err.message);
-        return err;
-      }
-
-      return results;
-    });
+    return new Promise((resolve, reject) => {
+      connection.query(queryStr, (err, results, fields) => {
+        if (err) { 
+          return reject(err); 
+        }
+  
+        resolve(results);
+      });
+  
+      connection.end();
+    })
   }
 
   queryall = async () => {

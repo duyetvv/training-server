@@ -1,27 +1,26 @@
-const account = (router) => {
+import UserModel from './model';
+import Database from '../../database';
 
-  router.route('/add')
-  .post(({ body: { username, password } }, res) => {
-    let result = { status: 0, msg: 'Login failure' };
 
-    if (username === 'duyetvv' && password === '111111') {
-      result = { status: 1, msg: 'Login success' };
-    }
+const userData = {
+  username: '',
+  password: '123456',
+  email: 'duytevovan.99@gmail.com',
+  phone: '111111',
+  address: 'Cao Phong, Xuan Lam, Song Cau, Phu Yen',
+  numberOrders: '1111111',
+};
 
-    res.json(result);
-  });
-
-  router.route('/update')
-  .put(({ bearer }, res) => {
-    let result = { status: 0, msg: 'Logout failure' };
-
-    if (bearer) {
-      result = { status: 1, msg: 'Logout success' };
-    }
-
-    res.json(result);
+const userRoutes = (router) => {
+  router.route('/user')
+  .get((req, res) => {
+    const user = new UserModel(userData);
+    const validRes = user.validate();
+    
+    console.log('validRes ', validRes);
+    res.json(validRes);
   });
 }
 
 
-export default account;
+export default userRoutes;

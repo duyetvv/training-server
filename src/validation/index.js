@@ -1,9 +1,13 @@
 import { ERRORCODE } from './errorcode';
 import { email, number } from './regex';
 
+/**
+ * The list of the validation rules.
+ * It will be define dependen on project
+ */
 const validateRules = {
   required: {
-    test: ({ val }) => val.length > 0,
+    test: ({ val }) => !!val && val.length > 0,
     res: ({ name, arg }) => ({ arg, name, code: ERRORCODE.required })
   },
   dataType: {
@@ -25,9 +29,16 @@ const validateRules = {
   number: {
     test: ({ val }) => !val || number.test(val),
     res: ({ name, arg }) => ({ arg, name, code: ERRORCODE.number })
-  }
+  },
+  phone: {
+    test: ({ val }) => !val || number.test(val),
+    res: ({ name, arg }) => ({ arg, name, code: ERRORCODE.phone })
+  },
 };
 
+/**
+ * The validate function
+ */
 export default (type) => (
   (val, name, arg = null) => ({
     isValid: validateRules[type].test({ val, name, arg }),

@@ -1,12 +1,12 @@
 export const ERRORCODE = {
-  uniqueness: 'api_error_001',
-  required: 'api_error_002',
-  dataType: 'api_error_003',
-  maxLength: 'api_error_004',
-  minLength: 'api_error_005',
-  unknownField: 'api_error_006',
-  email: 'api_error_007',
-  password: 'api_error_008',
-  phone: 'api_error_009',
-  number: 'api_error_010'
+  uniqueness: 'api_error_uniqueness',
+  required: 'api_error_required',
+  dataType: 'api_error_data_type',
+  maxLength: 'api_error_max_length',
+  minLength: 'api_error_min_length',
+  unknownField: 'api_error_unknown_field',
+  email: 'api_error_email',
+  password: 'api_error_password',
+  phone: 'api_error_phone',
+  number: 'api_error_number'
 };

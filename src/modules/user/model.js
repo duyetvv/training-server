@@ -1,53 +1,72 @@
+import Model from '../../model';
+
+/**
+ * The defined of the user object
+ */
 export const user = {
   username: {
-    type: 'char(255)',
-    required: 'not null',
-    default: null,
+    dataType: 'char(80)',
+    nullStr: 'not null',
+    defVal: null,
     validations: {
       required: true,
-    }
+    },
+    more: 'unique'
   },
   password: {
-    type: 'char(255)',
-    required: 'not null',
-    default: null,
+    dataType: 'char(41)',
+    nullStr: 'not null',
+    defVal: null,
     validations: {
       required: true,
     }
   },
   email: {
-    type: 'char(255)',
-    required: 'not null',
-    default: null,
+    dataType: 'char(255)',
+    nullStr: 'null',
+    defVal: null,
     validations: {
       required: true,
       email: true,
     }
   },
   phone: {
-    type: 'char(255)',
-    required: 'not null',
-    default: null,
+    dataType: 'char(20)',
+    nullStr: 'not null',
+    defVal: null,
     validations: {
       required: true,
       phone: true,
     }
   },
   address: {
-    type: 'char(255)',
-    required: 'not null',
-    default: null,
+    dataType: 'varchar(32765)',
+    nullStr: 'not null',
+    defVal: null,
     validations: {
       required: true,
     }
   },
   numberOrders: {
-    type: 'int',
-    required: 'null',
-    default: null,
+    dataType: 'int',
+    nullStr: 'null',
+    defVal: null,
     validations: {
       required: true,
       number: true,
     }
   }
 }
+
+/**
+ * The User model extended from the Model class.
+ * The usage: (new User()).init({ username: 'duyetvv', ... })
+ */
+export default class UserModel extends Model {
+  constructor(data) {
+    super(user);
+    Object.keys(this.props).forEach((field) => {
+      this.props[field].val = data[field];
+    });
+  }
+};
