@@ -1,5 +1,6 @@
 import Model from '../../model';
 
+
 /**
  * The defined of the user object
  */
@@ -28,7 +29,8 @@ export const user = {
     validations: {
       required: true,
       email: true,
-    }
+    },
+    more: 'default null'
   },
   phone: {
     dataType: 'char(20)',
@@ -40,7 +42,7 @@ export const user = {
     }
   },
   address: {
-    dataType: 'varchar(32765)',
+    dataType: 'varchar(255)',
     nullStr: 'not null',
     defVal: null,
     validations: {
@@ -48,13 +50,14 @@ export const user = {
     }
   },
   numberOrders: {
-    dataType: 'int',
+    dataType: 'char(20)',
     nullStr: 'null',
     defVal: null,
     validations: {
       required: true,
       number: true,
-    }
+    },
+    more: 'default null',
   }
 }
 
@@ -70,3 +73,5 @@ export default class UserModel extends Model {
     });
   }
 };
+
+
