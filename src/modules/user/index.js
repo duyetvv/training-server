@@ -3,19 +3,24 @@ import Database from '../../database';
 
 const userData = new Database('tbl_user', user);
 
-const userTmp = {
-  username: 'duyetvv',
-  password: '123456',
-  email: 'duytevovan.99@gmail.com',
-  phone: '111111',
-  address: 'Cao Phong, Xuan Lam, Song Cau, Phu Yen',
-  numberOrders: '1111111',
-};
-
-
 const getUser = (req, res) => {
-  res.json(userTmp)
+  userData.selectAll().then((data) => {
+    res.json(data)
+  }).catch((err) => {
+    res.json(err);
+  });
 };
+
+const getUserById = ({ params: { id } }, res) => {
+  userData.selectByClause({
+    selectList: '*',
+    conditions: `id=+${id}`
+  }).then((data) => {
+    res.json(data);
+  }).catch((err) => {
+    res.json(err);
+  });
+}
 
 const addUser = ({ body }, res) => {
   const user = new UserModel(body);
@@ -33,9 +38,18 @@ const addUser = ({ body }, res) => {
   });
 };
 
+const updateUser = ({ body, params: { id } }, res) => {
+  userData.updating(id, body).then((data) => {
+    res.json(data);
+  }).catch((err) => {
+    res.json(err);
+  });
+};
+
 const userRoutes = (router) => {
   router.route('/user').get(getUser).post(addUser);
-}
+  router.route('/user/:id').get(getUserById).put(updateUser);
+};
 
 
 export default userRoutes;

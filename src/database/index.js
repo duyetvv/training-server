@@ -25,13 +25,13 @@ class Database {
       if (err) { return err; }
 
       connection.query(queryStr, (err, results, fields) => {
+        connection.end();
+
         if (err) { return err; }
 
         return results;
       });
-
-      connection.end();
-    })
+    });
   }
 
   inserting = (entity) => {
@@ -46,14 +46,12 @@ class Database {
     
     return new Promise((resolve, reject) => {
       connection.query(queryStr, (err, results) => {
-        if (err) {
-          return reject({ status: 0, error: err });
-        }
+        connection.end();
+
+        if (err) { return reject({ status: 0, error: err }); }
 
         resolve({ status: 1, results });
       });
-
-      connection.end();
     });
   };
 
@@ -63,32 +61,46 @@ class Database {
 
     return new Promise((resolve, reject) => {
       connection.query(queryStr, (error, results) => {
-        if (error) {
-          return reject(error);
-        }
+        connection.end();
+
+        if (error) { return reject(error); }
         resolve(results);
       });
-
-      connection.end();
     });
   };
 
-  updating = async (id, valObj) => {
+  selectByClause = ({ conditions, selectList }) => {
+    const connection = mysql.createConnection(config.mysql);
+    const queryStr = `SELECT ${selectList} FROM ${this.name} WHERE ${conditions}`;
+
+    return new Promise((resolve, reject) => {
+      connection.query(queryStr, (error, results) => {
+        connection.end();
+        
+        if (error) { return reject(error); }
+
+        resolve(results);
+      });
+    });
+  }
+  
+  updating = (id, valObj) => {
+    const connection = mysql.createConnection(config.mysql);
     const newVal = Object.keys(valObj).map((field) => (
-      `${field} = ${valObj[field]}`
+      `${field} = '${valObj[field]}'`
     ));
 
-    const queryStr = `UPDATE ${this.name} 
-      SET ${newVal.join(', ')}
-      WHERE id = ${id}
-    `;
+    const queryStr = `UPDATE ${this.name} SET ${newVal.join(', ')} WHERE id = ${id}`;
 
-    connection.query(queryStr, data, (error, results, fields) => {
-      if (error) {
-        return console.error(error.message);
-      }
-      console.log('Rows affected:', results.affectedRows, fields);
-    });
+    return new Promise((resolve, reject) => {
+      connection.query(queryStr, (error, results) => {
+        connection.end();
+
+        if (error) { return reject(error); }
+
+        resolve(results);
+      });
+    })
   }
 
   deleting = (id) => {
