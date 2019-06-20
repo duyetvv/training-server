@@ -5,7 +5,6 @@ class Database {
   constructor(name, props) {
     this.props = props;
     this.name = name;
-    this.creating();
   }
 
   creating = async () => {

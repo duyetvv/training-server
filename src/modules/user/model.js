@@ -4,7 +4,7 @@ import Model from '../../model';
 /**
  * The defined of the user object
  */
-export const user = {
+export const userEntity = {
   username: {
     dataType: 'char(80)',
     nullStr: 'not null',
@@ -67,7 +67,10 @@ export const user = {
  */
 export default class UserModel extends Model {
   constructor(data) {
-    super(user);
+    super(userEntity);
+    
+    this.creating();
+    
     Object.keys(this.props).forEach((field) => {
       this.props[field].val = data[field];
     });

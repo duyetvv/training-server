@@ -1,7 +1,9 @@
-import UserModel, { user } from './model';
+import UserModel, { userEntity } from './model';
+import { PATH } from './constants';
 import Database from '../../database';
 
-const userData = new Database('tbl_user', user);
+const userData = new Database('tbl_user', userEntity);
+
 
 const getUser = (req, res) => {
   userData.selectAll().then((data) => {
@@ -10,6 +12,7 @@ const getUser = (req, res) => {
     res.json(err);
   });
 };
+
 
 const getUserById = ({ params: { id } }, res) => {
   userData.selectByClause({
@@ -21,6 +24,7 @@ const getUserById = ({ params: { id } }, res) => {
     res.json(err);
   });
 }
+
 
 const addUser = ({ body }, res) => {
   const user = new UserModel(body);
@@ -38,7 +42,16 @@ const addUser = ({ body }, res) => {
   });
 };
 
+
 const updateUser = ({ body, params: { id } }, res) => {
+  const user = new UserModel(body);
+  const validRes = user.validate();
+
+  if (!validRes.isValid) {
+    res.json(validRes);
+    return;
+  }
+  
   userData.updating(id, body).then((data) => {
     res.json(data);
   }).catch((err) => {
@@ -46,10 +59,10 @@ const updateUser = ({ body, params: { id } }, res) => {
   });
 };
 
-const userRoutes = (router) => {
-  router.route('/user').get(getUser).post(addUser);
-  router.route('/user/:id').get(getUserById).put(updateUser);
-};
 
+const userRoutes = (router) => {
+  router.route(PATH.USER).get(getUser).post(addUser);
+  router.route(PATH.USER_DETAIL).get(getUserById).put(updateUser);
+};
 
 export default userRoutes;
