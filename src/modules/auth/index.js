@@ -4,7 +4,7 @@ import Database from '../../database';
 
 const authData = new Database('tbl_user', entity);
 
-const loggin = ({ body }, res) => {
+const loggin = ({ body, clientIp }, res) => {
   const auth = new AuthModel(body);
   const validRes = auth.validate();
 
