@@ -49,8 +49,8 @@ export default class Model {
     const errors = [];
 
     validateTypes.forEach((type) => {
-      console.log('validate type ', type);
       const { isValid, res } = validate(type)(val, field, validations[type]);
+
       !isValid && errors.push(res);
     });
 

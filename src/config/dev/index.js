@@ -1,3 +1,4 @@
 import mysql from './mysql';
+import token from './token';
 
-export default { mysql };
+export default { mysql, token };

@@ -7,7 +7,7 @@ class Database {
     this.name = name;
   }
 
-  creating = async () => {
+  creating = () => {
     const connection = mysql.createConnection(config.mysql);
     const props = this.props;
     

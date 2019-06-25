@@ -1,17 +1,26 @@
 const path = require('path');
+const webpack = require('webpack')
+const nodeExternals = require('webpack-node-externals')
 
 module.exports = {
-  mode: 'development',
-  entry: {
-    main: ['./src/index.js']
-  },
+  entry: path.resolve(__dirname, 'src/index.js'),
+
   output: {
     filename: '[name].js',
     chunkFilename: '[name].chunk.js',
     path: path.join(__dirname, 'dist'),
-    publicPath: '/',
+    publicPath: '/'
   },
+
   target: "node",
+
+  node: {
+    __filename: true,
+    __dirname: true,
+  },
+
+  externals: [nodeExternals()],
+  
   module: {
     rules: [
       {
@@ -22,5 +31,5 @@ module.exports = {
         }
       }
     ]
-  }
+  },
 }

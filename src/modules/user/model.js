@@ -69,8 +69,6 @@ export default class UserModel extends Model {
   constructor(data) {
     super(userEntity);
     
-    this.creating();
-    
     Object.keys(this.props).forEach((field) => {
       this.props[field].val = data[field];
     });

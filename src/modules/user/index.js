@@ -4,6 +4,7 @@ import Database from '../../database';
 
 const userData = new Database('tbl_user', userEntity);
 
+userData.creating();
 
 const getUser = (req, res) => {
   userData.selectAll().then((data) => {
