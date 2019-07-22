@@ -23,3 +23,7 @@ export const generateToken = (user) => {
     access_token: generateAccessToken(user, sign),
   };
 }
+
+export const verifyAccessToken = (token) => {
+  return jwt.verify(token, publicKey, tokenOpts);
+}

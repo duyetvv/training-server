@@ -99,7 +99,7 @@ class Database {
 
         resolve(results);
       });
-    })
+    });
   }
 
   deleting = (id) => {

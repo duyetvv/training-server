@@ -2,12 +2,18 @@ import AuthModel, { entity } from './model';
 import TokenModel, { tokenEntity } from './tokenModel';
 import { PATH } from './constants';
 import Database from '../../database';
-import { generateToken } from '../../helpers/token';
+import { generateToken, verifyAccessToken } from '../../helpers/token';
 
 const authData = new Database('tbl_user', entity);
 const tokenData = new Database('tbl_token', tokenEntity);
 
 tokenData.creating();
+
+const getTokenFromAuth = (token) => {
+  const tokenIdx = token.startsWith('Bearer ') ? 7 : 6;
+ 
+  return token.slice(tokenIdx, token.length);
+}
 
 const insertToken = (body) => {
   const token = new TokenModel(body);
@@ -49,15 +55,15 @@ const login = ({ body, clientIp }, res) => {
 }
 
 
-const getSelf = (req, res) => {
-  console.log(req);
-
-  res.json({ demo: 1})
+const getSelf = ({ headers : { authorization } }, res) => {
+  const token = getTokenFromAuth(authorization);
+  const verified = verifyAccessToken(token);
+  res.json({ token, verified })
 } 
 
 const authRoutes = (router) => {
   router.route(PATH.LOGIN).post(login);
-  router.route(PATH.SELF).post(getSelf);
+  router.route(PATH.SELF).get(getSelf);
 };
 
 
